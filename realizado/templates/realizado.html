@@ -1,0 +1,295 @@
+{% load static %}
+{% load currency_filters %}
+{% load number_filters %}
+{% load add_decimal %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/realizado.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <link rel="icon" href="{% static 'wayeasi-favicon.png' %}" type="image/x-icon">
+    <title>WayEasi | Realizado</title>
+</head>
+<body>
+    <header class="header">
+        <!-- ############### Barra de Navegação Fixa ############### -->
+        <nav class="nav-bar">
+            <a class="logo" href="{% url 'realizado:realizado' %}">WAYEASI</a>
+            <ul class="nav-list">
+                <li class="nav-fluxo-de-caixa"><a href="{% url 'fluxo_de_caixa:fluxo_de_caixa' %}">Fluxo de Caixa</a></li>
+                <li class="nav-realizado"><a href="{% url 'realizado:realizado' %}">Realizado</a></li>
+                <li class="nav-relatorios"><a href="#">Relatórios</a></li>
+                <li class="nav-line"><div class="line"></div></li>
+                <li class="nav-configuracoes"><a href="{% url 'configuracoes:configuracoes' %}">Configurações</a></li>
+                <li class="nav-meu-perfil"><a href="meu-perfil.html">Meu Perfil</a></li>
+            </ul>
+        </nav>
+    </header>
+    <!-- ############### Metade Superior da Página ############### -->
+    <main class="main">
+        <div class="filter-boxes">
+            <button class="toggle-filters-btn" onclick="toggleFilters()">Filtros</button>
+            <!-- ############### Caixa com Filtros à Esquerda ############### -->
+            <div class="box-grid">
+                <form id="formulario-filtros" method="get">
+                    <div class="box-grid-filters">
+                        <!-- ############### Filtro Contas Contábeis ############### -->
+                        <section class="flex">
+                            <label for="contas-contabeis">Contas Contábeis</label>
+                            <select id="contas-contabeis" name = "contas_contabeis">
+                                <option value="" disabled selected hidden>Selecione</option>
+                                <option value="Receita 1">Receita 1</option>
+                                <option value="Receita 2">Receita 2</option>
+                                <option value="Receita 3">Despesa 1</option>
+                                <option value="Receita 4">Despesa 2</option>
+                            </select>
+                        </section>
+                        <!-- ############### Filtro Meses ############### -->
+                        <section class="flex">
+                            <label for="dropdown-button-meses">Meses</label>
+                            <div class="dropdown-multiselect">
+                                <button type="button" onclick="toggleDropdownMeses(event)" id="dropdown-button-meses" class="dropdown-button">Selecione</button>
+                                <div id="dropdown-content-meses" class="dropdown-content">
+                                    <div class="dropdown-header">
+                                        <button class="button-selecionar-todos" type="button" onclick="selectAllMeses(event)">Selecionar Todos</button>
+                                        <button class="button-desmarcar-todos" type="button" onclick="deselectAllMeses(event)">Desmarcar Todos</button>
+                                    </div>
+                                    <div class="dropdown-options">
+                                        {% for total in totais_mes_realizado %}
+                                        <label class="label-filters">
+                                            <input type="checkbox" name="meses" value="{{ total.data_formatada }}" class="mes-checkbox" data-inicio-mes="{{ total.inicio_mes|date:'Y-m-d' }}" data-fim-mes="{{ total.fim_mes|date:'Y-m-d' }}">
+                                            {{ total.data_formatada }}
+                                        </label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- ############### Filtro Bancos ############### -->
+                        <section class="flex">
+                            <label for="dropdown-button-bancos">Bancos</label>
+                            <div class="dropdown-multiselect">
+                                <button type="button" onclick="toggleDropdownBancos(event)" id="dropdown-button-bancos" class="dropdown-button">Selecione</button>
+                                <div id="dropdown-content-bancos" class="dropdown-content">
+                                    <div class="dropdown-header">
+                                        <button class="button-selecionar-todos" type="button" onclick="selectAllBancos(event)">Selecionar Todos</button>
+                                        <button class="button-desmarcar-todos" type="button" onclick="deselectAllBancos(event)">Desmarcar Todos</button>
+                                    </div>
+                                    <div class="dropdown-options">
+                                        {% for banco in bancos %}
+                                        <label class="label-filters">
+                                            <input type="checkbox" name="bancos" value="{{ banco.id }}" class="banco-checkbox">
+                                            {{ banco.banco }}
+                                        </label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- ############### Filtro Data Início ############### -->
+                        <section class="flex">
+                            <label for="data-inicio">De</label>
+                            <input class="data" type="date" id="data-inicio" name = "data_inicio">
+                        </section>
+                        <!-- ############### Filtro Data Fim ############### -->
+                        <section class="flex">
+                            <label for="data-fim">Até</label>
+                            <input class="data" type="date" id="data-fim" name = "data_fim">
+                        </section>
+                        <!-- ############### Filtro Natureza ############### -->
+                        <section class="flex">
+                            <label for="dropdown-button-natureza">Natureza</label>
+                            <div class="dropdown-multiselect">
+                                <button type="button" onclick="toggleDropdownNatureza(event)" id="dropdown-button-natureza" class="dropdown-button">Crédito, Débito</button>
+                                <div id="dropdown-content-natureza" class="dropdown-content">
+                                    <div class="dropdown-header">
+                                        <button class="button-selecionar-todos" type="button" onclick="selectAllNatureza(event)">Selecionar Todos</button>
+                                        <button class="button-desmarcar-todos" type="button" onclick="deselectAllNatureza(event)">Desmarcar Todos</button>
+                                    </div>
+                                    <div class="dropdown-options">
+                                        <label class="label-filters">
+                                            <input type="checkbox" name="natureza" value="Crédito" class="natureza-checkbox">
+                                            Crédito
+                                        </label>
+                                        <label class="label-filters">
+                                            <input type="checkbox" name="natureza" value="Débito" class="natureza-checkbox">
+                                            Débito
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- ############### Filtro Caixa de Pesquisa ############### -->
+                        <div class="pesquisa mesclar-2">
+                            <input type="text" class="caixa-pesquisa" id="caixa-pesquisa" name ="caixa_pesquisa" placeholder="Pesquisar">
+                        </div>
+                        <div class="pesquisa-tags">
+                            <input type="text" class="caixa-pesquisa-tags" id="caixa-pesquisa-tags"  name ="caixa_pesquisa_tags" placeholder="Tags">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- ############### Tabela de Bancos ############### -->
+            <button class="toggle-banks-btn" onclick="toggleBanks()">Bancos</button>
+            <div class="box-grid-bancos">
+                <div class="conteudo-tabela-bancos">
+                    <table class="tabela-bancos">
+                        <thead class="cabecalho-bancos">
+                            <tr class="linha-cabecalho-bancos">
+                                <th class="bancos-bancos-col" scope="col">Banco</th>
+                                <th class="ag-bancos-col" scope="col">Agência</th>
+                                <th class="conta-bancos-col" scope="col">Conta</th>
+                                <th class="saldo-bancos-col" scope="col">Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for banco in bancos %}
+                            <tr class="row-bancos" data-banco-id="{{ banco.id }}" scope="row">
+                                <td class="banco-row" name="banco">{{ banco.banco }}</td>
+                                <td class="ag-row" name="agencia">{{ banco.agencia }}</td>
+                                <td class="conta-row" name="conta">{{ banco.conta }}</td>
+                                <td class="saldo-banco-row" name="saldo_inicial">{{ banco.saldo_inicial|add_decimal:banco.saldo_atual|format_number }}</td>
+                            </tr>
+                            {% endfor %}
+                            <tr class="totais-row" scope="row">
+                                <td class=""></td>
+                                <td class=""></td>
+                                <td class="total-row">TOTAL</td>
+                                <td class="saldo-total-banco-row" name="saldo-total-banco-row">{{ saldo_total_bancos|currency_br }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal realizado -->
+        <dialog class="modal-realizado" id="modal-realizado">
+
+            <h1 class="modal-titulo">Realizado</h1>
+            
+            <form class="modal-form-realizado" action="/realizado/" method="POST">{% csrf_token %}
+                <input type="hidden" name="lancamento_id_realizado" value="{{ realizado.id }}">
+                <input type="hidden" name="uuid_realizado" value="{{ realizado.uuid_correlacao }}">
+                <input type="hidden" name="uuid_parcelas_realizado" value="{{ realizado.uuid_correlacao_parcelas }}">
+                <section class="modal-flex">
+                    <label for="data-realizado">Data</label>
+                    <input class="modal-data" id="data-realizado" type="date" name="vencimento" required><br>
+                </section>
+            
+                <section class="modal-flex">
+                    <label for="descricao-realizado">Descrição</label>
+                    <input class="modal-descricao" id="descricao-realizado" maxlength="100" type="text" name="descricao" required><br>
+                </section>
+            
+                <section class="modal-flex">
+                    <label for="observacao-realizado">Observação</label>
+                    <input class="modal-obs" id="observacao-realizado" maxlength="100" type="text" name="observacao"></input><br>
+                </section>
+                
+                <section class="modal-flex">
+                    <label for="valor-realizado">Valor</label>
+                    <input class="modal-valor" id="valor-realizado" type="text" name="valor" required readonly><br>
+                </section>
+            
+                <section class="modal-flex">
+                    <label for="conta-contabil-realizado">Conta Contábil</label>
+                    <input class="modal-conta-contabil" id="conta-contabil-realizado" type="text" name="conta_contabil" required readonly>
+                    </input><br>
+                </section>
+            
+                <section class="modal-flex" id="parcelas-section-realizado">
+                    <label for="parcelas-realizado">Parcela</label>
+                    <input class="modal-parcelas" id="parcelas-realizado" type="text" name="parcelas" parcela-atual="{{ realizado.parcela_atual }}" parcelas-total="{{ realizado.parcelas_total }}" min="1" value="1" readonly><br>
+                </section>
+
+                <section class="modal-flex mesclar-2">
+                    <div id="tag-container-realizado" class="tag-container"></div>
+                </section>
+                <section class="modal-botoes">
+                    <input type="submit" class="modal-salvar" name="salvar_realizado" value="Salvar">
+                    <button type="button" class="modal-fechar-realizado">Cancelar</button>
+                </section>
+            </form>
+        </dialog>
+
+        <!-- ############### Tabela com Lançamentos ############### -->
+        <div class="conteudo-tabela-lancamentos">
+            <table class="tabela-lancamentos">
+                <thead class="cabecalho-lancamentos">
+                    <tr class="linha-cabecalho-lancamentos">
+                        <th class="checkbox-col" scope="col"></th>
+                        <th class="vencimento-col" scope="col">Vencimento</th>
+                        <th class="descricao-col" scope="col">Descrição</th>
+                        <th class="obs-col" scope="col">Observação</th>
+                        <th class="banco-col" scope="col">Banco</th>
+                        <th class="parcela-col" scope="col">Parcela</th>
+                        <th class="debito-col" scope="col">Débito</th>
+                        <th class="credito-col" scope="col">Crédito</th>
+                        <th class="saldo-col" scope="col">Saldo</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-lancamentos">
+                    {% for realizado in Tabela_realizado_list %}
+                        {% if realizado.is_total %}
+                            <tr class="linha-total-mes">
+                                <td></td>
+                                <td colspan="5">Total do Mês {{ realizado.data_liquidacao|date:"m/Y" }}</td>
+                                <td class="debito-total-row">{{ realizado.debito|format_number }}</td>
+                                <td class="credito-total-row">{{ realizado.credito|format_number }}</td>
+                                <td class="saldo-total-row">{{ realizado.saldo|format_number }}</td>
+                            </tr>
+                        {% else %}
+                            <tr class="row-lancamentos" id="row-lancamentos" data-id-row="{{ realizado.id }}" data-banco-liquidacao="{{ realizado.banco_liquidacao }}" data-banco-id-liquidacao="{{ realizado.banco_id_liquidacao }}" data-conta-contabil="{{ realizado.conta_contabil }}" parcela-atual="{{ realizado.parcela_atual }}" parcelas-total="{{ realizado.parcelas_total }}" data-natureza="{{ realizado.natureza }}" data-uuid-correlacao="{{ realizado.uuid_correlacao }}" data-uuid-correlacao-parcelas="{{ realizado.uuid_correlacao_parcelas }}" scope="row">
+                                <td class="checkbox-row"><label class="checkbox-container"><input id="checkbox-personalizado-{{ realizado.id }}" class="checkbox-personalizado" type="checkbox" data-id="{{ realizado.id }}" data-uuid-correlacao="{{ realizado.uuid_correlacao }}" data-uuid-correlacao-parcelas="{{ realizado.uuid_correlacao_parcelas }}"><span class="checkmark"></span></label></td>
+                                <td class="vencimento-row">{{ realizado.data_liquidacao|date:"d/m/Y" }}</td>
+                                <td class="descricao-row">{{ realizado.descricao }}</td>
+                                <td class="obs-row">
+                                    {{ realizado.observacao }}
+                                    <small class="d-block">Tags: {{ realizado.tags }}</small>
+                                </td>
+                                <td class="banco-row">{{ realizado.banco_liquidacao }}</td>
+                                <td class="parcela-row">{{ realizado.parcela_atual }}/{{ realizado.parcelas_total }}</td>
+                                <input type="hidden" id="parcelas-total-originais-recebimentos" name="parcelas_total_originais">
+                                <input type="hidden" id="parcelas-total-originais-pagamentos" name="parcelas_total_originais">
+                                {% if realizado.natureza == 'Débito' %}
+                                    <td class="debito-row">{{ realizado.valor|format_number }}</td>
+                                    <td class="credito-row"></td>
+                                {% else %}
+                                    <td class="debito-row"></td>
+                                    <td class="credito-row">{{ realizado.valor|format_number }}</td>
+                                {% endif %}
+                                <td class="saldo-row" id = "saldo-row">{{ realizado.saldo|format_number }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ############### Botões da Checkbox ############### -->
+        <div class="botoes-acoes">
+            <!-- ############### Botão de Liquidar ############### -->
+            <div class="btn-areas-realizado">
+                <div class="btn-coluna">
+                    <label for="retornar-button">Retornar</label>
+                    <button class="btn-acoes retornar-button" id="retornar-button">
+                        <svg version="1.1" id="ios7_x5F_arrows_1_" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 128 128" style="enable-background:new 0 0 128 128" xml:space="preserve" class="retornar"><g id="_x32_2_1_"><path d="M70.7 7.1C45 7.1 23.2 24 16 47.2L7.2 14.5 1.5 16l12.1 44.8h.1l45.1-12-1.5-5.6-37 9.8c5-23 25.7-40.3 50.3-40.3 28.5 0 51.5 22.9 51.5 51.2 0 28.3-23.1 51.2-51.5 51.2-17.6 0-33.1-8.8-42.4-22.1-.3-.4-.9-1.3-.9-1.3l-5.6 1.8s.5.8.8 1.3c10.2 15.7 27.9 26.1 48.2 26.1 31.6 0 57.3-25.5 57.3-56.9-.1-31.4-25.7-56.9-57.3-56.9z" id="icon_17_"/></g></svg>
+                    </button>
+                </div>
+                <!-- ############### Botão de Cancelar ############### -->
+                <div class="btn-coluna">
+                    <label for="cancelar-button">Cancelar</label>
+                    <button class="btn-acoes cancelar-button" id="cancelar-button">
+                        <svg class="x-svg" fill="#000000" height="800px" width="800px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 460.775 460.775" xml:space="preserve"><path d="M285.08,230.397L456.218,59.27c6.076-6.077,6.076-15.911,0-21.986L423.511,4.565c-2.913-2.911-6.866-4.55-10.992-4.55 c-4.127,0-8.08,1.639-10.993,4.55l-171.138,171.14L59.25,4.565c-2.913-2.911-6.866-4.55-10.993-4.55 c-4.126,0-8.08,1.639-10.992,4.55L4.558,37.284c-6.077,6.075-6.077,15.909,0,21.986l171.138,171.128L4.575,401.505 c-6.074,6.077-6.074,15.911,0,21.986l32.709,32.719c2.911,2.911,6.865,4.55,10.992,4.55c4.127,0,8.08-1.639,10.994-4.55 l171.117-171.12l171.118,171.12c2.913,2.911,6.866,4.55,10.993,4.55c4.128,0,8.081-1.639,10.992-4.55l32.709-32.719 c6.074-6.075,6.074-15.909,0-21.986L285.08,230.397z"/>
+                        </svg>
+                    </button>
+            </div>
+        </div>
+    </main>
+    <script src="{% static 'scripts/scripts_realizado.js' %}"></script>
+</body>
+</html>

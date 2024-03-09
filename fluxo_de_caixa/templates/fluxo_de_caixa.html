@@ -1,0 +1,541 @@
+{% load static %}
+{% load currency_filters %}
+{% load number_filters %}
+{% load add_decimal %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/fluxo-de-caixa.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <link rel="icon" href="{% static 'wayeasi-favicon.png' %}" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <title>WayEasi | Fluxo de Caixa</title>
+</head>
+<body>
+    <header class="header">
+        <button class="openbtn" onclick="toggleNav()">☰</button>
+        <!-- ############### Barra de Navegação Fixa ############### -->
+        <nav class="nav-bar">
+            <a class="logo" href="{% url 'fluxo_de_caixa:fluxo_de_caixa' %}">WAYEASI</a>
+            <ul class="nav-list">
+                <li class="nav-fluxo-de-caixa"><a href="{% url 'fluxo_de_caixa:fluxo_de_caixa' %}">Fluxo de Caixa</a></li>
+                <li class="nav-realizado"><a href="{% url 'realizado:realizado' %}">Realizado</a></li>
+                <li class="nav-relatorios"><a href="#">Relatórios</a></li>
+                <li class="nav-line"><div class="line"></div></li>
+                <li class="nav-configuracoes"><a href="{% url 'configuracoes:configuracoes' %}">Configurações</a></li>
+                <li class="nav-meu-perfil"><a href="meu-perfil.html">Meu Perfil</a></li>
+            </ul>
+        </nav>
+    </header>
+    <!-- ############### Metade Superior da Página ############### -->
+    <main class="main">
+        <div class="filter-boxes">
+            <button class="toggle-filters-btn" onclick="toggleFilters()">Filtros</button>
+            <!-- ############### Caixa com Filtros à Esquerda ############### -->
+            <div class="box-grid">
+                <form id="formulario-filtros" method="get">
+                    <div class="box-grid-filters">
+                        <!-- ############### Filtro Contas Contábeis ############### -->
+                        <section class="flex">
+                            <label for="contas-contabeis">Contas Contábeis</label>
+                            <select id="contas-contabeis" name = "contas_contabeis">
+                                <option value="" disabled selected hidden>Selecione</option>
+                                <option value="Receita 1">Receita 1</option>
+                                <option value="Receita 2">Receita 2</option>
+                                <option value="Receita 3">Despesa 1</option>
+                                <option value="Receita 4">Despesa 2</option>
+                            </select>
+                        </section>
+                        <!-- ############### Filtro Meses ############### -->
+                        <section class="flex">
+                            <label for="dropdown-button-meses">Meses</label>
+                            <div class="dropdown-multiselect">
+                                <button type="button" onclick="toggleDropdownMeses(event)" id="dropdown-button-meses" class="dropdown-button">Selecione</button>
+                                <div id="dropdown-content-meses" class="dropdown-content">
+                                    <div class="dropdown-header">
+                                        <button class="button-selecionar-todos" type="button" onclick="selectAllMeses(event)">Selecionar Todos</button>
+                                        <button class="button-desmarcar-todos" type="button" onclick="deselectAllMeses(event)">Desmarcar Todos</button>
+                                    </div>
+                                    <div class="dropdown-options">
+                                        {% for total in totais_mes_fluxo %}
+                                        <label class="label-filters">
+                                            <input type="checkbox" name="meses" value="{{ total.data_formatada }}" class="mes-checkbox" data-inicio-mes="{{ total.inicio_mes|date:'Y-m-d' }}" data-fim-mes="{{ total.fim_mes|date:'Y-m-d' }}">
+                                            {{ total.data_formatada }}
+                                        </label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- ############### Filtro Bancos ############### -->
+                        <section class="flex">
+                            <label for="dropdown-button-bancos">Bancos</label>
+                            <div class="dropdown-multiselect">
+                                <button type="button" onclick="toggleDropdownBancos(event)" id="dropdown-button-bancos" class="dropdown-button">Selecione</button>
+                                <div id="dropdown-content-bancos" class="dropdown-content">
+                                    <div class="dropdown-header">
+                                        <button class="button-selecionar-todos" type="button" onclick="selectAllBancos(event)">Selecionar Todos</button>
+                                        <button class="button-desmarcar-todos" type="button" onclick="deselectAllBancos(event)">Desmarcar Todos</button>
+                                    </div>
+                                    <div class="dropdown-options">
+                                        {% for banco in bancos %}
+                                        <label>
+                                            <input id="banco-checkbox-{{ banco.id }}" type="checkbox" class="banco-checkbox" value="{{ banco.id }}" data-banco-id="{{ banco.id }}">
+                                            {{ banco.banco }}
+                                        </label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- ############### Filtro Data Início ############### -->
+                        <section class="flex">
+                            <label for="data-inicio">De</label>
+                            <input class="data" type="date" id="data-inicio" name = "data_inicio">
+                        </section>
+                        <!-- ############### Filtro Data Fim ############### -->
+                        <section class="flex">
+                            <label for="data-fim">Até</label>
+                            <input class="data" type="date" id="data-fim" name = "data_fim">
+                        </section>
+                        <!-- ############### Filtro Natureza ############### -->
+                        <section class="flex">
+                            <label for="dropdown-button-natureza">Natureza</label>
+                            <div class="dropdown-multiselect">
+                                <button type="button" onclick="toggleDropdownNatureza(event)" id="dropdown-button-natureza" class="dropdown-button">Crédito, Débito</button>
+                                <div id="dropdown-content-natureza" class="dropdown-content">
+                                    <div class="dropdown-header">
+                                        <button class="button-selecionar-todos" type="button" onclick="selectAllNatureza(event)">Selecionar Todos</button>
+                                        <button class="button-desmarcar-todos" type="button" onclick="deselectAllNatureza(event)">Desmarcar Todos</button>
+                                    </div>
+                                    <div class="dropdown-options">
+                                        <label class="label-filters">
+                                            <input type="checkbox" name="natureza" value="Crédito" class="natureza-checkbox">
+                                            Crédito
+                                        </label>
+                                        <label class="label-filters">
+                                            <input type="checkbox" name="natureza" value="Débito" class="natureza-checkbox">
+                                            Débito
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- ############### Filtro Caixa de Pesquisa ############### -->
+                        <div class="pesquisa mesclar-2">
+                            <input type="text" class="caixa-pesquisa" id="caixa-pesquisa" name ="caixa_pesquisa" placeholder="Pesquisar">
+                        </div>
+                        <div class="pesquisa-tags">
+                            <input type="text" class="caixa-pesquisa-tags" id="caixa-pesquisa-tags"  name ="caixa_pesquisa_tags" placeholder="Tags">
+                        </div>
+                    </div>
+                </form>
+                    <!-- ############### Botões da Caixa com Filtros ############### -->
+                    <div class="botoes-filtros mesclar-3">
+                        <!-- ############### Botão de Recebimentos ############### -->
+                        <section>
+                            <button class="botao recebimentos" type="button">
+                                <svg class="svgIcon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
+                                    <path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4"/>
+                                </svg>
+                            </button>
+                        </section>
+                        <!-- ############### Botão de Pagamentos ############### -->
+                        <section>
+                            <button class="botao pagamentos" type="button">
+                                <svg class="svgIcon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
+                                    <path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1v12m0 0 4-4m-4 4L1 9"/>
+                                </svg>
+                        </section>
+                        <!-- ############### Botão de Transferências ############### -->
+                        <section>
+                            <button class="botao transferencias" type="button">
+                                <svg class="svgIcon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 20">
+                                    <path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6v13m0 0 3-3m-3 3-3-3m11-2V1m0 0L9 4m3-3 3 3"/>
+                                </svg>
+                            </button>
+                        </section>
+                    </div>
+            </div>
+            <!-- ############### Tabela de Bancos ############### -->
+            <button class="toggle-banks-btn" onclick="toggleBanks()">Bancos</button>
+            <div class="box-grid-bancos" id="box-grid-bancos">
+                <div class="conteudo-tabela-bancos">
+                    <table class="tabela-bancos">
+                        <thead class="cabecalho-bancos">
+                            <tr class="linha-cabecalho-bancos">
+                                <th class="bancos-bancos-col" scope="col">Banco</th>
+                                <th class="ag-bancos-col" scope="col">Agência</th>
+                                <th class="conta-bancos-col" scope="col">Conta</th>
+                                <th class="saldo-bancos-col" scope="col">Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for banco in bancos %}
+                            <tr class="row-bancos" scope="row" name="banco-id" data-banco-id="{{ banco.id }}">
+                                <td class="banco-row" name="banco">{{ banco.banco }}</td>
+                                <td class="ag-row" name="agencia">{{ banco.agencia }}</td>
+                                <td class="conta-row" name="conta">{{ banco.conta }}</td>
+                                <td class="saldo-banco-row" name="saldo_inicial">{{ banco.saldo_inicial|add_decimal:banco.saldo_atual|format_number }}</td>
+                            </tr>
+                            {% endfor %}
+                            <tr class="totais-row" scope="row">
+                                <td class=""></td>
+                                <td class=""></td>
+                                <td class="total-row">Total</td>
+                                <td class="saldo-total-banco-row" name="saldo-total-banco-row">{{ saldo_total_bancos|currency_br }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ############### Janelas/Modais de Lançamentos ############### -->
+
+        <!-- Modal Recebimentos -->
+        <dialog class="modal-recebimentos" id="modal-recebimentos">
+
+            <h1 class="modal-titulo">Recebimentos</h1>
+            
+            <form class="modal-form-recebimentos" action="/fluxo_de_caixa/" method="POST">{% csrf_token %}
+                <input type="hidden" name="lancamento_id_recebimentos" value="{{ fluxo_de_caixa.id }}">
+                <input type="hidden" name="uuid_recebimentos" value="{{ fluxo_de_caixa.uuid_correlacao }}">
+                <section class="modal-flex">
+                    <label for="data-recebimentos">Data</label>
+                    <input class="modal-data" id="data-recebimentos" type="date" name="vencimento" required><br>
+                </section>
+            
+                <section class="modal-flex">
+                    <label for="descricao-recebimentos">Descrição</label>
+                    <input class="modal-descricao" id="descricao-recebimentos" maxlength="100" type="text" name="descricao" required><br>
+                </section>
+            
+                <section class="modal-flex">
+                    <label for="observacao-recebimentos">Observação</label>
+                    <input class="modal-obs" id="observacao-recebimentos" maxlength="100" type="text" name="observacao"></input><br>
+                </section>
+                
+                <section class="modal-flex">
+                    <label for="valor-recebimentos">Valor</label>
+                    <input class="modal-valor" id="valor-recebimentos" type="text" name="valor" oninput="formatarCampoValor(this)" value="R$ " required><br>
+                </section>
+            
+                <section class="modal-flex">
+                    <label for="conta-contabil-recebimentos">Conta Contábil</label>
+                    <select class="modal-conta-contabil" id="conta-contabil-recebimentos" type="text" name="conta_contabil" required>
+                    <option value="Receita 1">Receita 1</option>
+                    <option value="Receita 2">Receita 2</option>
+                    <option value="Receita 3">Receita 3</option>
+                    </select><br>
+                </section>
+            
+                <section class="modal-flex" id="recorrencia-section">
+                    <label for="recorrencia-recebimentos" class="recorrencia-label">Recorrência</label>
+                    <select class="modal-recorrencia" id="recorrencia-recebimentos" name="recorrencia" required onchange="mostrarParcelasRecebimentos()">
+                        <option value="nao">Não</option>
+                        <option value="sim">Sim</option>
+                    </select><br>
+                </section>
+            
+                <section class="modal-flex mesclar-2" id="parcelas-section-recebimentos" style="display:none;">
+                    <label for="parcelas-recebimentos">Número de Parcelas</label>
+                    <input class="modal-parcelas" id="parcelas-recebimentos" type="number" name="parcelas" parcela-atual="{{ fluxo_de_caixa.parcela_atual }}" parcelas-total="{{ fluxo_de_caixa.parcelas_total }}" min="1" value="1"><br>
+                </section>
+
+                <section class="modal-flex mesclar-2">
+                    <div id="tag-container-recebimentos" class="tag-container">
+                    </div>
+                    <input type="text" id="tagInput-recebimentos" class="tagInput" placeholder="Adicione uma tag">
+                    <input type="hidden" id="tagsHiddenInput-recebimentos" name="tags">
+                </section>
+                <section class="modal-botoes">
+                    <input type="submit" class="modal-salvar" name="salvar_recebimento" value="Salvar">
+                    <button type="button" class="modal-fechar-recebimentos">Cancelar</button>
+                </section>
+            </form>
+        </dialog>
+
+        <!-- Modal Pagamentos -->
+        <dialog class="modal-pagamentos" id="modal-pagamentos">
+
+            <h1 class="modal-titulo">Pagamentos</h1>
+            
+            <form class="modal-form-pagamentos" action="/fluxo_de_caixa/" method="POST">{% csrf_token %}
+                <input type="hidden" name="lancamento_id_pagamentos" value="{{ fluxo_de_caixa.id }}">
+                <input type="hidden" name="uuid_pagamentos" value="{{ fluxo_de_caixa.uuid_correlacao }}">
+                <section class="modal-flex">
+                    <label for="data-pagamentos">Data</label>
+                    <input class="modal-data" type="date" id="data-pagamentos" name="vencimento" required><br>
+                </section>
+            
+                <section class="modal-flex">
+                    <label for="descricao-pagamentos">Descrição</label>
+                    <input class="modal-descricao" id="descricao-pagamentos" maxlength="100" type="text" name="descricao" required><br>
+                </section>
+            
+                <section class="modal-flex">
+                    <label for="observacao-pagamentos">Observação</label>
+                    <input class="modal-obs" id="observacao-pagamentos" maxlength="100" type="text" name="observacao"></input><br>
+                </section>
+                
+                <section class="modal-flex">
+                    <label for="valor-pagamentos">Valor</label>
+                    <input class="modal-valor" id="valor-pagamentos" type="text" name="valor" oninput="formatarCampoValor(this)" value="R$ " required><br>
+                </section>
+            
+                <section class="modal-flex">
+                    <label for="conta-contabil-pagamentos">Conta Contábil</label>
+                    <select class="modal-conta-contabil" id="conta-contabil-pagamentos" type="text" name="conta_contabil" required>
+                    <option value="conta1">Conta 1</option>
+                    <option value="conta2">Conta 2</option>
+                    <option value="conta3">Conta 3</option>
+                    </select><br>
+                </section>
+            
+                <section class="modal-flex">
+                    <label for="recorrencia-pagamentos" class="recorrencia-label">Recorrência</label>
+                    <select class="modal-recorrencia" id="recorrencia-pagamentos" name="recorrencia" required onchange="mostrarParcelasPagamentos()">
+                        <option value="nao">Não</option>
+                        <option value="sim">Sim</option>
+                    </select><br>
+                </section>
+            
+                <section class="modal-flex mesclar-2" id="parcelas-section-pagamentos" style="display:none;">
+                    <label for="parcelas-pagamentos">Número de Parcelas</label>
+                    <input class="modal-parcelas" id="parcelas-pagamentos" type="number" name="parcelas" parcela-atual="{{ fluxo_de_caixa.parcela_atual }}" parcelas-total="{{ fluxo_de_caixa.parcelas_total }}" min="1" value="1"><br>
+                </section>
+
+                <section class="modal-flex mesclar-2">
+                    <div id="tag-container-pagamentos" class="tag-container">
+                    </div>
+                    <input type="text" id="tagInput-pagamentos" class="tagInput" placeholder="Adicione uma tag">
+                    <input type="hidden" id="tagsHiddenInput-pagamentos" name="tags">
+                </section>
+                <section class="modal-botoes">
+                    <input type="submit" class="modal-salvar" name="salvar_pagamentos" value="Salvar">
+                    <button type="button" class="modal-fechar-pagamentos">Cancelar</button>
+                </section>
+            </form>
+        </dialog>
+
+        <!-- Modal Transferências -->    
+        <dialog class="modal-transferencias">
+
+            <h1 class="modal-titulo">Transferências</h1>
+            
+            <form class="modal-form-transferencias" action="/fluxo_de_caixa/" method="post">{% csrf_token %}
+                <input type="hidden" name="transferencias" value="transferencia">
+                <section class="modal-flex">
+                    <label for="data-transferencias">Data</label>
+                    <input class="modal-data" id="data-transferencias" type="date" name="data" required><br>
+                </section>
+                
+                <section class="modal-flex">
+                    <label for="valor-transferencias">Valor</label>
+                    <input class="modal-valor" id="valor-transferencias" type="text" name="valor" oninput="formatarCampoValor(this)" value="R$ " required><br>
+                </section>
+                
+                <section class="modal-flex">
+                    <label for="banco-saida">Do banco</label>
+                    <select class="modal-banco-saida" id="banco-saida" name="banco_saida" required>
+                        <option value="" disabled selected hidden>Selecione</option>
+                        {% for bancos in bancos %}
+                        <option value="{{ bancos.id }}|{{ bancos.banco }}">{{ bancos.banco }}</option>
+                        {% endfor %}
+                    </select><br>
+                </section>
+                <section class="modal-flex">
+                    <label for="banco-entrada">Para o banco</label>
+                    <select class="modal-banco-entrada" id="banco-entrada" name="banco_entrada" required>
+                        <option value="" disabled selected hidden>Selecione</option>
+                        {% for bancos in bancos %}
+                        <option value="{{ bancos.id }}|{{ bancos.banco }}">{{ bancos.banco }}</option>
+                        {% endfor %}
+                    </select><br>
+                </section>
+            
+                <section class="modal-flex mesclar-2">
+                    <label for="observacao-transferencia">Observação</label>
+                    <input class="modal-descricao" id="observacao-transferencia" type="text" name="observacao"><br>
+                </section>
+                <section class="modal-botoes mesclar-2">
+                    <input class="modal-salvar" name="salvar_transferencias" type="submit" value="Salvar">
+                    <button type="button" class="modal-fechar-transferencias">Cancelar</button>
+                </section>
+            </form>
+        </dialog>
+
+        <!-- ############### Tabela com Lançamentos ############### -->
+        <div class="conteudo-tabela-lancamentos">
+            <table class="tabela-lancamentos">
+                <thead class="cabecalho-lancamentos">
+                    <tr class="linha-cabecalho-lancamentos">
+                        <th class="checkbox-col" scope="col"></th>
+                        <th class="vencimento-col" scope="col">Vencimento</th>
+                        <th class="descricao-col" scope="col">Descrição</th>
+                        <th class="obs-col" scope="col">Observação</th>
+                        <th class="parcela-col" scope="col">Parcela</th>
+                        <th class="debito-col" scope="col">Débito</th>
+                        <th class="credito-col" scope="col">Crédito</th>
+                        <th class="saldo-col" scope="col">Saldo</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-lancamentos">
+                    {% for fluxo_de_caixa in Tabela_fluxo_list %}
+                        {% if fluxo_de_caixa.is_total %}
+                            <tr class="linha-total-mes">
+                                <td></td>
+                                <td colspan="4">Total do Mês {{ fluxo_de_caixa.vencimento|date:"m/Y" }}</td>
+                                <td class="debito-total-row">{{ fluxo_de_caixa.debito|format_number }}</td>
+                                <td class="credito-total-row">{{ fluxo_de_caixa.credito|format_number }}</td>
+                                <td class="saldo-total-row">{{ fluxo_de_caixa.saldo|format_number }}</td>
+                            </tr>
+                        {% else %}
+                            <tr class="row-lancamentos" id="row-lancamentos" data-id-row="{{ fluxo_de_caixa.id }}" data-conta-contabil="{{ fluxo_de_caixa.conta_contabil }}" data-natureza="{{ fluxo_de_caixa.natureza }}" parcela-atual="{{ fluxo_de_caixa.parcela_atual }}" parcelas-total="{{ fluxo_de_caixa.parcelas_total }}" data-uuid-row="{{ fluxo_de_caixa.uuid_correlacao }}" scope="row">
+                                <td class="checkbox-row"><label class="checkbox-container"><input id="checkbox-personalizado-{{ fluxo_de_caixa.id }}" class="checkbox-personalizado" type="checkbox" data-id="{{ fluxo_de_caixa.id }}" data-uuid-row="{{ fluxo_de_caixa.uuid_correlacao }}"><span class="checkmark"></span></label></td>
+                                <td class="vencimento-row">{{ fluxo_de_caixa.vencimento|date:"d/m/Y" }}</td>
+                                <td class="descricao-row">{{ fluxo_de_caixa.descricao }}</td>
+                                <td class="obs-row">
+                                    {{ fluxo_de_caixa.observacao }}
+                                    <small class="d-block">Tags: {{ fluxo_de_caixa.tags }}</small>
+                                </td>
+                                <td class="parcela-row">{{ fluxo_de_caixa.parcela_atual }}/{{ fluxo_de_caixa.parcelas_total }}</td>
+                                <input type="hidden" id="parcelas-total-originais-recebimentos" name="parcelas_total_originais">
+                                <input type="hidden" id="parcelas-total-originais-pagamentos" name="parcelas_total_originais">
+                                {% if fluxo_de_caixa.natureza == 'Débito' %}
+                                    <td class="debito-row">{{ fluxo_de_caixa.valor|format_number }}</td>
+                                    <td class="credito-row"></td>
+                                {% else %}
+                                    <td class="debito-row"></td>
+                                    <td class="credito-row">{{ fluxo_de_caixa.valor|format_number }}</td>
+                                {% endif %}
+                                <td class="saldo-row">{{ fluxo_de_caixa.saldo|format_number }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ############### Botões da Checkbox ############### -->
+        <div class="botoes-acoes">
+            <!-- ############### Botão de Liquidar ############### -->
+            <div class="btn-areas">
+                <div class="btn-coluna">
+                    <label for="liquidar-button" data-uuid-row="{{ fluxo_de_caixa.uuid_correlacao }}">Liquidar</label>
+                    <button class="btn-acoes liquidar-button" id="liquidar-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 1 24 24" width="30" height="30" class="nuvem">
+                            <path d="M22,15.04C22,17.23 20.24,19 18.07,19H5.93C3.76,19 2,17.23 2,15.04C2,13.07 3.43,11.44 5.31,11.14C5.28,11 5.27,10.86 5.27,10.71C5.27,9.33 6.38,8.2 7.76,8.2C8.37,8.2 8.94,8.43 9.37,8.8C10.14,7.05 11.13,5.44 13.91,5.44C17.28,5.44 18.87,8.06 18.87,10.83C18.87,10.94 18.87,11.06 18.86,11.17C20.65,11.54 22,13.13 22,15.04Z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <!-- ############### Botão de Apagar ############### -->
+                <div class="btn-coluna">
+                    <label for="apagar-button">Apagar</label>
+                    <button class="btn-acoes apagar-button" id="apagar-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 39 7" class="topo-lixeira">
+                            <line stroke-width="4" stroke="white" y2="5" x2="39" y1="5"></line>
+                            <line stroke-width="3" stroke="white" y2="1.5" x2="26.0357" y1="1.5" x1="12"></line>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 33 39" class="fundo-lixeira">
+                            <mask fill="white" id="path-1-inside-1_8_19">
+                            <path d="M0 0H33V35C33 37.2091 31.2091 39 29 39H4C1.79086 39 0 37.2091 0 35V0Z"></path>
+                            </mask>
+                            <path mask="url(#path-1-inside-1_8_19)" fill="white" d="M0 0H33H0ZM37 35C37 39.4183 33.4183 43 29 43H4C-0.418278 43 -4 39.4183 -4 35H4H29H37ZM4 43C-0.418278 43 -4 39.4183 -4 35V0H4V35V43ZM37 0V35C37 39.4183 33.4183 43 29 43V35V0H37Z"></path>
+                            <path stroke-width="4" stroke="white" d="M12 6L12 29"></path>
+                            <path stroke-width="4" stroke="white" d="M21 6V29"></path>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 89 80" class="lixeira">
+                            <path fill="white" d="M20.5 10.5L37.5 15.5L42.5 11.5L51.5 12.5L68.75 0L72 11.5L79.5 12.5H88.5L87 22L68.75 31.5L75.5066 25L86 26L87 35.5L77.5 48L70.5 49.5L80 50L77.5 71.5L63.5 58.5L53.5 68.5L65.5 70.5L45.5 73L35.5 79.5L28 67L16 63L12 51.5L0 48L16 25L22.5 17L20.5 10.5Z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <!-- ############### Botão de Cancelar ############### -->
+                <div class="btn-coluna">
+                    <label for="cancelar-button">Cancelar</label>
+                    <button class="btn-acoes cancelar-button" id="cancelar-button">
+                        <svg class="x-svg" fill="#000000" height="800px" width="800px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 460.775 460.775" xml:space="preserve"><path d="M285.08,230.397L456.218,59.27c6.076-6.077,6.076-15.911,0-21.986L423.511,4.565c-2.913-2.911-6.866-4.55-10.992-4.55 c-4.127,0-8.08,1.639-10.993,4.55l-171.138,171.14L59.25,4.565c-2.913-2.911-6.866-4.55-10.993-4.55 c-4.126,0-8.08,1.639-10.992,4.55L4.558,37.284c-6.077,6.075-6.077,15.909,0,21.986l171.138,171.128L4.575,401.505 c-6.074,6.077-6.074,15.911,0,21.986l32.709,32.719c2.911,2.911,6.865,4.55,10.992,4.55c4.127,0,8.08-1.639,10.994-4.55 l171.117-171.12l171.118,171.12c2.913,2.911,6.866,4.55,10.993,4.55c4.128,0,8.081-1.639,10.992-4.55l32.709-32.719 c6.074-6.075,6.074-15.909,0-21.986L285.08,230.397z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="total-liquidar-row mesclar-3">
+                    Total a liquidar:&nbsp;<label></label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Liquidação -->
+        <dialog class="modal-liquidacoes" id="modal-liquidacoes">
+            <h1 class="modal-titulo">Liquidar</h1>
+            
+            <form class="modal-form-liquidacoes" action="/fluxo_de_caixa/" method="POST">{% csrf_token %}
+                <input type="hidden" name="liquidacoes" value="liquidacoes">
+                <input type="hidden" name="uuid" data-uuid-row="{{ fluxo_de_caixa.uuid_correlacao }}">
+                <section class="mesclar-3">
+                    <div class="" id="box-grid-bancos">
+                        <div class="conteudo-tabela-bancos-liquidacao">
+                            <table class="tabela-bancos-liquidacao">
+                                <thead class="cabecalho-bancos-liquidacao">
+                                    <tr class="linha-cabecalho-bancos">
+                                        <th class="checkbox-col" scope="col"></th>
+                                        <th class="bancos-bancos-liquidacao-col" scope="col">Contas</th>
+                                        <th class="ag-bancos-liquidacao-col" scope="col">Agência</th>
+                                        <th class="conta-bancos-liquidacao-col" scope="col">Contas</th>
+                                        <th class="saldo-bancos-liquidacao-col" scope="col">Saldo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for banco in bancos %}
+                                    <tr class="row-bancos" scope="row">
+                                        <td class="checkbox-row"><label class="checkbox-container"><input id="checkbox-personalizado-liquidacao-{{ banco.id }}" class="checkbox-personalizado-liquidacao" type="checkbox"><span class="checkmark-liquidacao"></span></label></td>
+                                        <td class="banco-row banco-liquidacao" name="banco" data-nome-banco="{{ banco.banco }}" data-id-banco="{{ banco.id }}">{{ banco.banco }}</td>
+                                        <td class="ag-row" name="agencia">{{ banco.agencia }}</td>
+                                        <td class="conta-row" name="conta">{{ banco.conta }}</td>
+                                        <td class="saldo-banco-liquidacao-row" name="saldo_inicial">{{ banco.saldo_inicial|add:banco.saldo_atual|format_number }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tr class="totais-row-liquidacao" scope="row">
+                                        <td class=""></td>
+                                        <td class=""></td>
+                                        <td class=""></td>
+                                        <td class="total-row">Total</td>
+                                        <td class="saldo-total-banco-liquidacao-row" name="saldo-total-banco-liquidacao-row">{{ saldo_total_bancos|currency_br }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Contêiner para os lançamentos selecionados -->
+                <div class="label-lancamentos-selecionados mesclar-3">
+                    <label>Data de Liquidação</label>
+                    <label>Descrição</label>
+                    <label>Observação</label>
+                    <label>Valor</label>
+                    <label>Natureza</label>
+                    <label></label>
+                    <label class="label-parcial" style="display:none;">Parcial</label>
+                </div>
+                <div class="lista-lancamentos-selecionados mesclar-3" id="lancamentos-selecionados">
+                    <!-- Itens dinâmicos serão adicionados aqui -->
+                </div>
+        
+                <section class="modal-botoes mesclar-3">
+                    <div class="saldo-liquidacao">
+                        <div class="titulo-saldo-liquidacao">SALDO:</div>
+                        <div name="saldo-liquidacao">R$ 0,00</div>
+                    </div>
+                    <input type="submit" class="modal-salvar" id="salvar-liquidacao" name="salvar_liquidacao" value="Liquidar">
+                    <button type="button" class="modal-fechar-liquidacoes">Cancelar</button>
+                </section>
+            </form>
+        </dialog>
+    </main>
+    <script src="{% static 'scripts/scripts.js' %}"></script>
+</body>
+</html>

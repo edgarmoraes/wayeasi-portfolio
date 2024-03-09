@@ -1,0 +1,1257 @@
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+/* Estilos Universais */
+:root {
+  --primary-font: Inter, -apple-system, BlinkMacSystemFont, Helvetica, sans-serif;
+  --transition-duration1: 0.3s;
+  --transition-duration2: 0.2s;
+  --transition-effect1: all ease-in-out;
+  --box-shadow1: 0 0 1em #00000013;
+  --box-shadow2: 0 0 1em #00000023;
+  --branco: #FFFFFF;
+  --preto: #000000;
+  --color1: #F0EEEE;
+  --color2: #F4F2F2;
+  --color3: #B1C381;
+  --color4: #3D3D40;
+  --color5: #006919;
+  --color6: #740000;
+  --color7: #7F4FFF;
+  --color8: #F87C7C;
+  --color9: #FFEB24;
+  --color10: #FFFAFA;
+  --border1: solid 1px #ececec;
+  --border2: solid 10px #ececec;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+a {
+  color: #202020;
+  text-decoration: none;
+  transition: var(--transition-duration1);
+}
+
+a:hover {
+  opacity: 0.7;
+}
+
+/* Barra de Navegação Fixa */
+
+.openbtn {
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--color7);
+  background-color: #3d3d40bf;
+  color: #b4b4b4;
+  padding: 10px 15px;
+  border: none;
+  display: none;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 24px;
+  letter-spacing: 4px;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 8vh;
+  font-family: var(--primary-font);
+  background-color: var(--branco);
+  border-bottom: solid 1px #ececec;
+  backdrop-filter: blur(5px);
+  box-shadow: var(--box-shadow1);
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+}
+
+.nav-list li {
+  margin-left: 48px;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.line {
+  border: 0.5px solid #202020;
+  margin-top: 1.8px;
+  height: 16px;
+}
+
+/* Componentes da Caixa de Filtros
+... */
+
+/* .box-grid {
+  display: flex;
+  flex-direction: column;
+  width: 700px;
+  height: auto;
+  margin: 4.5rem auto 1rem auto;
+  background-color: var(--branco);
+  border-radius: 1rem;
+  box-shadow: var(--box-shadow1);
+} */
+
+/* .box-grid-filters {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 700px;
+  padding: 1rem;
+  padding-bottom: 0rem;
+} */
+
+.filter-boxes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.mesclar-2 {
+  grid-column: span 2;
+}
+
+.mesclar-3 {
+  grid-column: span 3;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  font-family: var(--primary-font);
+  color: #202020;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* Filtro de meses e bancos */
+
+.button-selecionar-todos,
+.button-desmarcar-todos {
+  background-color: var(--branco);
+  border: solid 1px #202020;
+  margin: 2px;
+  padding: 5px;
+  width: 100%;
+  transition: var(--transition-effect1) var(--transition-duration2);
+  font-family: var(--primary-font);
+  font-weight: 700;
+  border-radius: 5px;
+}
+
+.button-selecionar-todos:hover,
+.button-desmarcar-todos:hover {
+  background-color: var(--color7);
+}
+
+.dropdown-content {
+  border-radius: 5px;
+}
+
+.dropdown-multiselect {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.dropdown-button {
+  background-color: #f9f9f9;
+  color: black;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  font-family: var(--primary-font);
+  font-size: 14px;
+  margin-top: 5px;
+  background-color: var(--color2);
+  border: var(--border1);
+  color: var(--color4);
+  padding: 0.7rem 1rem;
+  border-radius: 5px;
+  transition: .3s all ease;
+}
+
+.dropdown-button:hover {
+  box-shadow: var(--box-shadow1);
+  background-color: var(--color1);
+  color: #202020;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  max-height: 350px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: var(--color2);
+}
+
+.dropdown-header {
+  padding: 10px;
+  text-align: center;
+  background-color: var(--color2);
+}
+
+.dropdown-header button {
+  cursor: pointer;
+}
+
+.dropdown-options label {
+  display: block;
+  cursor: pointer;
+  padding: 10px;
+  font-weight: 400;
+  background-color: var(--color2);
+  transition: var(--transition-effect1) var(--transition-duration1);
+}
+
+.dropdown-options label:hover {
+  background: #efeaff;
+}
+
+.show { display: block; }
+
+/* Estilos dos Selects e Inputs */
+.flex > select,
+.flex > input {
+  width: 100%;
+  font-family: var(--primary-font);
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.flex select,
+.flex input {
+  background-color: var(--color2);
+  border: var(--border1);
+  color: var(--color4);
+  padding: 0.7rem 1rem;
+  border-radius: 5px;
+  transition: var(--transition-effect1) var(--transition-duration1);
+}
+
+.flex select:hover,
+.flex select:focus,
+.flex input:hover,
+.flex input:focus {
+  box-shadow: var(--box-shadow1);
+  background-color: var(--color1);
+  color: #202020;
+}
+
+/* Botões Mobile */
+.toggle-filters-btn,
+.toggle-banks-btn {
+  display: none;
+  margin: 10px auto;
+  padding: 0.8em 1.7em;
+  width: 300px;
+  color: var(--color7);
+  background-color: transparent;
+  border-radius: 30px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: .5s;
+  font-weight: 700;
+  font-size: 20px;
+  border: 1px solid;
+  font-family: var(--primary-font);
+  text-transform: uppercase;
+  z-index: 1;
+  box-shadow: var(--box-shadow2);
+}
+
+.toggle-filters-btn::before,
+.toggle-filters-btn::after,
+.toggle-banks-btn::before,
+.toggle-banks-btn::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 50px;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  border-radius: 50%;
+  z-index: -1;
+  background-color: var(--color7);
+  transition: .5s ease;
+}
+
+.toggle-filters-btn::before,
+.toggle-banks-btn::before {
+  top: -1em;
+  left: -1em;
+}
+
+.toggle-filters-btn::after,
+.toggle-banks-btn::after {
+  left: calc(100% + 1em);
+  top: calc(100% + 1em);
+}
+
+.toggle-filters-btn:hover::before,
+.toggle-filters-btn:hover::after,
+.toggle-banks-btn:hover::before,
+.toggle-banks-btn:hover::after {
+  height: 410px;
+  width: 410px;
+}
+
+.toggle-filters-btn:hover,
+.toggle-banks-btn:hover {
+  color: var(--color9);
+  border-color: var(--color7);
+}
+
+.toggle-filters-btn:active,
+.toggle-banks-btn:active {
+  filter: brightness(.8);
+}
+
+/* Caixa de Pesquisa */
+.pesquisa {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 10px;
+  font-family: var(--primary-font);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.caixa-pesquisa {
+  margin: 0;
+  padding: 0.7rem 2.5rem 0.7rem 1rem;
+  width: 100%;
+  background-color: var(--color2);
+  font-family: var(--primary-font);
+  color: #202020;
+  font-size: 15px;
+  border: var(--border1);
+  border-radius: 30px;
+  transition: var(--transition-effect1) var(--transition-duration1);
+}
+
+.caixa-pesquisa:hover,
+.caixa-pesquisa:focus {
+  box-shadow: var(--box-shadow1);
+  background-color: var(--color1);
+}
+
+.caixa-pesquisa::-webkit-input-placeholder {
+  font-weight: 400;
+  color: var(--color4);
+}
+
+/* Caixa de Pesquisa de Tags */
+.pesquisa-tags {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 10px;
+  font-family: var(--primary-font);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.caixa-pesquisa-tags {
+  margin: 0;
+  padding: 0.7rem 1rem;
+  width: 100%;
+  background-color: var(--color2);
+  font-family: var(--primary-font);
+  color: #202020;
+  font-size: 15px;
+  border: var(--border1);
+  border-radius: 30px;
+  transition: var(--transition-effect1) var(--transition-duration1);
+}
+
+.caixa-pesquisa-tags:hover, .caixa-pesquisa-tags:focus {
+  box-shadow: var(--box-shadow1);
+  background-color: var(--color1);
+}
+
+.caixa-pesquisa-tags::-webkit-input-placeholder {
+  font-weight: 400;
+  color: var(--color4);
+}
+
+/* Tabela Bancos */
+.tabela-bancos,
+.tabela-bancos-liquidacao {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: var(--primary-font);
+  border-left: var(--border1);
+  border-right: var(--border1);
+  color: #202020;
+  border-spacing: 0;
+}
+
+.tabela-bancos th,
+.tabela-bancos-liquidacao th {
+  padding: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #202020;
+}
+
+.tabela-bancos td,
+.tabela-bancos-liquidacao td {
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.tabela-bancos tbody tr:hover,
+.tabela-bancos tbody tr:focus,
+.tabela-bancos-liquidacao tbody tr:hover,
+.tabela-bancos-liquidacao tbody tr:focus {
+  background: #efeaff;
+}
+
+.tabela-bancos tbody tr,
+.tabela-bancos-liquidacao tbody tr {
+  transition: .3s all ease;
+}
+
+.cabecalho-bancos,
+.cabecalho-bancos-liquidacao {
+  position: sticky;
+  top: 0;
+  height: 35px;
+  background-color: var(--color2);
+  z-index: 1;
+  backdrop-filter: (5px);
+  color: #202020;
+}
+
+.row-bancos {
+  height: 35px;
+  text-align: center;
+}
+
+.totais-row,
+.totais-row-liquidacao {
+  position: sticky;
+  bottom: 0px;
+  height: 36px;
+  background-color: var(--color2);
+  z-index: 1;
+}
+
+.bancos-bancos-col {
+  width: 200px;
+}
+
+.ag-bancos-col {
+  width: 100px;
+}
+
+.bancos-bancos-liquidacao-col {
+  width: 100px;
+}
+
+.ag-bancos-liquidacao-col {
+  width: 100px;
+}
+
+.conta-bancos-liquidacao-col {
+  width: 100px;
+}
+
+.saldo-bancos-liquidacao-col {
+  width: 100px;
+}
+
+.banco-row {
+  text-align: left;
+  padding: 0 20px;
+}
+
+td.total-row,
+td.saldo-total-banco-row,
+td.saldo-total-banco-liquidacao-row {
+  text-align: center; 
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* Tabela com Lançamentos */
+.conteudo-tabela-lancamentos {
+  display: flex;
+  justify-content: center;
+  font-family: var(--primary-font);
+  background-color: var(--branco);
+  font-weight: 300;
+  color: var(--preto);
+}
+
+.tabela-lancamentos {
+  margin: 10px;
+  margin-bottom: 30px;
+  min-width: 900px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: fixed;
+  width: 95%;
+}
+
+.linha-cabecalho-lancamentos {
+  border: var(--border1);
+}
+
+.tabela-lancamentos th {
+  padding: 0;
+  font-size: 14px;
+  font-weight: 700;
+  background-color: var(--color10);
+  height: 35px;
+  color: #202020;
+}
+
+.tabela-lancamentos td {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.tabela-lancamentos th small,
+.tabela-lancamentos td small {
+  display: block;
+  color: var(--preto);
+  font-weight: 400;
+  padding-top: 2px;
+}
+
+.tabela-lancamentos tbody tr:hover,
+.tabela-lancamentos tbody tr:focus {
+  background: #efeaff;
+}
+
+.tabela-lancamentos tbody tr {
+  transition: .3s all ease;
+}
+
+.row-lancamentos {
+  height: 40px;
+  border-bottom: 1px solid var(--color2);
+}
+
+.linha-total-mes {
+  height: 30px;
+  background-color: var(--color10);
+  border-bottom: 1px solid var(--color2);
+}
+
+.linha-total-mes td {
+  font-weight: 700;
+}
+
+.checkbox-col {
+  width: 40px;
+}
+
+.vencimento-col {
+  width: 100px;
+}
+
+.descricao-col {
+  width: 300px;
+}
+
+.obs-col {
+  width: 450px;
+}
+
+.parcela-col {
+  width: 60px;
+}
+
+.debito-col,
+.credito-col,
+.saldo-col {
+  width: 120px;
+}
+
+.checkbox-row {
+  text-align: center;
+}
+
+.vencimento-row,
+.parcela-row,
+.debito-row,
+.credito-row,
+.saldo-row {
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.debito-total-row,
+.credito-total-row,
+.saldo-total-row {
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.descricao-row,
+.obs-row {
+  padding: 5px 20px;
+}
+
+.mes-checkbox {
+  background-color: var(--color7);
+}
+
+/* Checkbox */
+.checkbox-container {
+  display: inline-block;
+  position: relative;
+  padding-left: 35px;
+  margin-left: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+}
+
+.checkbox-personalizado {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkbox-personalizado-liquidacao {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: var(--color2);
+  border-radius: 4px;
+  transition: background-color var(--transition-duration1);
+  box-shadow: 0 2px 5px #00000033;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--branco);
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.checkmark-liquidacao {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: var(--color2);
+  border-radius: 4px;
+  transition: background-color var(--transition-duration1);
+  box-shadow: 0 2px 5px #00000033;
+}
+
+.checkmark-liquidacao:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 7.2px;
+  top: 2.5px;
+  width: 4px;
+  height: 8px;
+  border: solid var(--branco);
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-personalizado-liquidacao:checked ~ .checkmark-liquidacao {
+  background-color: var(--color7);
+  box-shadow: 0 3px 7px #2196f34d;
+}
+
+.checkbox-personalizado-liquidacao:checked ~ .checkmark-liquidacao:after {
+  display: block;
+}
+.checkbox-personalizado:checked ~ .checkmark {
+  background-color: var(--color7);
+  box-shadow: 0 3px 7px #2196f34d;
+}
+
+.checkbox-personalizado:checked ~ .checkmark:after {
+  display: block;
+}
+
+@keyframes checkAnim {
+  0% {
+    height: 0;
+  }
+
+  100% {
+    height: 10px;
+  }
+}
+
+.checkbox-personalizado-liquidacao:checked ~ .checkmark-liquidacao:after {
+  animation: checkAnim 0.2s forwards;
+}
+
+.checkbox-personalizado:checked ~ .checkmark:after {
+  animation: checkAnim 0.2s forwards;
+}
+
+/* Botões de Liquidação */
+.botoes-acoes {
+  opacity: 0;
+  grid-template-columns: repeat(3, 1fr);
+  position: fixed;
+  justify-content: center;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  background-color: var(--color10);
+  padding: 10px;
+  width: 100%;
+  border: var(--border1);
+  box-shadow: var(--box-shadow1);
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  border-radius: 20px 20px 0px 0px;
+}
+
+.botoes-acoes.mostrar {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  border-radius: 20px 20px 0px 0px;
+}
+
+.btn-areas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 5px;
+}
+
+.btn-coluna {
+  font-family: var(--primary-font);
+  color: var(--preto);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.total-liquidar-row {
+  font-family: var(--primary-font);
+  color: var(--preto);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btn-coluna {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-acoes {
+  margin: 0 2rem;
+}
+
+.total-liquidar-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Botão de Liquidar */
+.liquidar-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background-color: var(--color3);
+  cursor: pointer;
+  border: 2px solid var(--color3);
+  transition-duration: 0.3s;
+  position: relative;
+  overflow: hidden;
+  transform: scale(0.7);
+}
+
+.liquidar-button:hover {
+  background-color: var(--color7);
+  border: 2px solid var(--color7);
+}
+
+.liquidar-button:active {
+  transform: scale(0.8);
+}
+
+.nuvem {
+  transform: scale(1.0);
+  transition: 200ms linear;
+  fill: var(--branco);
+}
+
+.liquidar-button:hover > .nuvem {
+  transform: scale(1.2);
+}
+
+.liquidar-button:hover > .nuvem path {
+  fill: var(--branco);
+  cursor: pointer;
+}
+
+/* Botão de Apagar */
+.apagar-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background-color: #ff5f5f;
+  cursor: pointer;
+  border: 2px solid #ff5f5f;
+  transition-duration: 0.3s;
+  position: relative;
+  overflow: hidden;
+  transform: scale(0.7);
+}
+
+.fundo-lixeira {
+  width: 15px;
+  z-index: 2;
+}
+
+.topo-lixeira {
+  width: 17px;
+  transform-origin: right;
+  transition-duration: 0.3s;
+  z-index: 2;
+}
+
+.apagar-button:hover .topo-lixeira {
+  transform: rotate(45deg);
+}
+
+.apagar-button:hover {
+  background-color: var(--color7);
+  border: 2px solid var(--color7);
+}
+
+.apagar-button:active {
+  transform: scale(0.8);
+}
+
+.lixeira {
+  position: absolute;
+  width: 14px;
+  height: auto;
+  z-index: 1;
+  opacity: 0;
+  transition: all 0.3s;
+}
+
+.apagar-button:hover .lixeira {
+  animation: throw 0.4s linear;
+}
+
+@keyframes throw {
+  from {
+    transform: translate(-400%, -700%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+}
+
+/* Botão de Cancelar */
+.cancelar-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background-color: var(--branco);
+  cursor: pointer;
+  border: 2px solid var(--color1);
+  transition-duration: 0.6s;
+  position: relative;
+  overflow: hidden;
+  transform: scale(0.7);
+}
+
+.cancelar-button:hover {
+  background-color: var(--color7);
+  border: 2px solid var(--color7);
+}
+
+.cancelar-button:active {
+  transform: scale(0.8);
+}
+
+.x-svg {
+  transform: scale(.4);
+  transition: 200ms linear;
+  fill: var(--color4);
+}
+
+.cancelar-button:hover > .x-svg {
+  transform: scale(.45);
+}
+
+.cancelar-button:hover > .x-svg path {
+  fill: var(--branco);
+  cursor: pointer;
+}
+
+/* Media Queries para telas de dispositivos móveis */
+@media screen and (max-width: 768px) {
+  .filter-boxes {
+      grid-template-columns: 1fr;
+  }
+
+  .nav-list li {
+      margin-left: 24px;
+  }
+
+  .pesquisa, .pesquisa-tags {
+      justify-content: center;
+  }
+
+  .tabela-lancamentos,
+  .tabela-bancos {
+      min-width: 0;
+      overflow-x: auto;
+  }
+
+  .conteudo-tabela-lancamentos {
+      display: block;
+  }
+
+  .flex > select, .flex > input,
+  .caixa-pesquisa,
+  .caixa-pesquisa-tags {
+      width: 90%;
+  }
+
+  .botoes-acoes {
+      width: 90%;
+      bottom: 10px;
+      left: 5%;
+      transform: translateX(0) translateY(100%);
+  }
+
+  /* Barra Lateral */
+  .header {
+    height: auto;
+    position: relative;
+  }
+
+  .openbtn {
+      display: block;
+      box-shadow: var(--box-shadow2);
+      transition: var(--transition-effect1) var(--transition-duration1);
+  }
+
+  .openbtn:hover {
+      background-color: var(--color7);
+      color: var(--color7);
+      transition: var(--transition-effect1) var(--transition-duration1);
+  }
+
+  .nav-bar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 80%;
+    height: 100%;
+    overflow-y: auto;
+    background-color: #3d3d40bf;
+    transition: 0.3s;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .nav-bar .logo {
+    display: block;
+    margin-bottom: 20px;
+    font-size: 34px;
+    letter-spacing: 4px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .nav-bar .nav-list {
+    display: block;
+    width: 100%;
+  }
+
+  .nav-bar .nav-list li {
+    text-align: center;
+    margin-left: 0;
+    margin-top: 30px;
+    font-size: 20px;
+  }
+
+  .nav-bar .line, .nav-line {
+    display: none;
+  }
+
+
+  .toggle-filters-btn,
+  .toggle-banks-btn {
+    display: inline-block;
+  }
+
+  /* Inicialmente oculta o formulário em dispositivos móveis */
+  #formulario-filtros,
+  #box-grid-bancos {
+      display: none;
+  }
+
+  /* Quando a classe .show-filters é adicionada via JavaScript, o formulário será exibido */
+  #formulario-filtros.show-filters,
+  #box-grid-bancos.show-filters {
+      display: block;
+  }
+
+  .mesclar-2,
+  .mesclar-3 {
+    grid-column: 1 / -1;
+  }
+
+  .flex,
+  .pesquisa,
+  .pesquisa-tags {
+    margin: 0.5rem 0;
+  }
+
+  .flex > select,
+  .flex > input,
+  .caixa-pesquisa,
+  .caixa-pesquisa-tags {
+    width: calc(100% - 2rem);
+    margin: 10px 1rem;
+  }
+
+  .conteudo-tabela-bancos {
+    max-height: none;
+  }
+  
+  .botoes-filtros {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+  }
+  
+  .botoes-filtros section {
+    flex: 1;
+  }
+  
+  /* Tabela Lançamentos */
+  .tabela-lancamentos {
+    min-width: 0;
+    width: 100%;
+    table-layout: auto;
+    margin: 0px
+  }
+  
+  /* Reduz o tamanho da fonte para as células da tabela */
+  .tabela-lancamentos th,
+  .tabela-lancamentos td {
+    font-size: 10px;
+      padding: 5px;
+  }
+
+  /* Oculta as colunas Observação e Parcela */
+  .obs-col,
+  .parcela-col,
+  .obs-row,
+  .parcela-row {
+      display: none;
+  }
+
+  .checkbox-container {
+    padding: 10px;
+    margin: 12px 0px 20px 5px
+  }
+  
+  .checkbox-col {
+    width: 10px;
+  }
+  
+  .vencimento-col {
+      width: 80px;
+  }
+
+  .descricao-col {
+      width: 200px;
+  }
+
+  .debito-col,
+  .credito-col,
+  .saldo-col {
+      width: 100px;
+  }
+
+  /* Ajustes para as células para melhor visualização */
+  .vencimento-row,
+  .debito-row,
+  .credito-row,
+  .saldo-row {
+      white-space: normal;
+      text-overflow: clip;
+  }
+
+  .vencimento-row {
+    letter-spacing: -.9px;
+  }
+
+  .row-lancamentos {
+      height: auto;
+  }
+
+/* Tabela Bancos */
+  .box-grid-bancos {
+    width: calc(100% - 2rem);
+    margin: 1rem;
+  }
+
+  .tabela-bancos {
+    font-size: 10px;
+    width: 100%;
+    table-layout: auto;
+  }
+
+  .tabela-bancos th, .tabela-bancos td {
+      padding: 5px;
+  }
+
+  .tabela-bancos th {
+    padding: 0;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .tabela-bancos td {
+    font-size: 10px;
+    font-weight: 300;
+  }
+
+  .banco-row {
+    text-align: left;
+  }
+
+  .ag-row,
+  .conta-row,
+  .saldo-banco-row,
+  .total-row,
+  .saldo-total-banco-row,
+  .saldo-total-banco-liquidacao-row {
+    text-align: center;
+    white-space: normal;
+  }
+
+  .saldo-banco-row,
+  .saldo-total-banco-row,
+  .saldo-total-banco-liquidacao-row {
+    text-align: center;
+  }
+
+  .row-bancos,
+  .totais-row {
+      height: auto;
+      font-family: var(--primary-font);
+  }
+
+  .bancos-bancos-col {
+    width: 40.75%;
+  }
+
+  .ag-bancos-col {
+    width: 16.85%;
+  }
+
+  .conta-bancos-col {
+    width: 16.85%;
+  }
+
+  td.total-row {
+    text-align: center;
+    font-weight: 900;
+  }
+
+  td.saldo-total-banco-row {
+    text-align: center;
+    font-weight: 900;
+  }
+
+}

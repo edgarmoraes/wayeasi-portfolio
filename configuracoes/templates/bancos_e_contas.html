@@ -1,0 +1,118 @@
+{% load static %}
+{% load currency_filters %}
+{% load number_filters %}
+{% load add_decimal %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bancos-e-contas.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <link rel="icon" href="{% static 'wayeasi-favicon.png' %}" type="image/x-icon">
+    <title>WayEasi | Bancos e Contas</title>
+</head>
+<body>
+    <header class="header">
+        <!-- ############### Barra de Navegação Fixa ############### -->
+        <nav class="nav-bar">
+            <a class="logo" href="{% url 'realizado:realizado' %}">WAYEASI</a>
+            <ul class="nav-list">
+                <li class="nav-fluxo-de-caixa"><a href="{% url 'fluxo_de_caixa:fluxo_de_caixa' %}">Fluxo de Caixa</a></li>
+                <li class="nav-realizado"><a href="{% url 'realizado:realizado' %}">Realizado</a></li>
+                <li class="nav-relatorios"><a href="#">Relatórios</a></li>
+                <li class="nav-line"><div class="line"></div></li>
+                <li class="nav-configuracoes"><a href="{% url 'configuracoes:configuracoes' %}">Configurações</a></li>
+                <li class="nav-meu-perfil"><a href="meu-perfil.html">Meu Perfil</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section>
+        <button class="botao adicionar-bancos">
+            <svg class="svgIcon" width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M11 17C11 17.5523 11.4477 18 12 18C12.5523 18 13 17.5523 13 17V13H17C17.5523 13 18 12.5523 18 12C18 11.4477 17.5523 11 17 11H13V7C13 6.44771 12.5523 6 12 6C11.4477 6 11 6.44771 11 7V11H7C6.44772 11 6 11.4477 6 12C6 12.5523 6.44772 13 7 13H11V17Z" fill="#000000"/>
+                </svg>
+        </button>
+    </section>
+
+    <div class="box-grid-bancos">
+        <div class="conteudo-tabela-bancos">
+            <table class="tabela-bancos">
+                <thead class="cabecalho-bancos">
+                    <tr class="linha-cabecalho-bancos">
+                        <th class="cadastro-contas-bancos-col" scope="col">Contas</th>
+                        <th class="cadastro-ag-bancos-col" scope="col">Agência</th>
+                        <th class="cadastro-conta-bancos-col" scope="col">Conta</th>
+                        <th class="cadastro-JPsaldo-bancos-col" scope="col">Saldo Inicial</th>
+                        <th class="cadastro-JPsaldo-bancos-col" scope="col">Saldo Atual</th>
+                        <th class="cadastro-status-bancos-col" scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for banco in bancos %}
+                    <tr class="row-bancos" scope="row" data-saldo-inicial="{{ banco.saldo_inicial }}" data-id-banco="{{ banco.id }}">
+                        <td class="banco-row" name="banco">{{ banco.banco }}</td>
+                        <td class="ag-row" name="agencia">{{ banco.agencia }}</td>
+                        <td class="conta-row" name="conta">{{ banco.conta }}</td>
+                        <td class="saldo-banco-row" name="saldo_inicial">{{ banco.saldo_inicial|format_number }}</td>
+                        <td class="saldo_consolidado-banco-row" name="saldo_inicial">{{ banco.saldo_consolidado|format_number }}</td>
+                        <td class="status-row" name="status_banco">
+                            {% if banco.status %}
+                            Ativo
+                            {% else %}
+                            Inativo
+                            {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <dialog class="modal-bancos">
+
+        <h1 class="modal-titulo">Bancos e Contas</h1>
+        
+        <form class="modal-form-bancos" action="/salvar_banco/" method="POST">{% csrf_token %}
+            <input type="hidden" name="id_banco" value="{{ banco.id }}">
+            <section class="modal-flex">
+                <label for="descricao-bancos">Banco</label>
+                <input class="modal-banco" id="descricao-bancos" type="text" name="descricao" required><br>
+            </section>
+        
+            <section class="modal-flex">
+                <label for="agencia-banco">Agência</label>
+                <input class="modal-agencia" id="agencia-banco" type="text" name="agencia" required><br>
+            </section>
+        
+            <section class="modal-flex">
+                <label for="conta-banco">Conta</label>
+                <input class="modal-conta" id="conta-banco" name="conta" required><br>
+            </section>
+            
+            <section class="modal-flex">
+                <label for="saldo-inicial">Saldo Inicial</label>
+                <input class="modal-valor" type="text" id="saldo-inicial" name="saldo-inicial" oninput="formatarCampoValorBancos(this)" value="" required><br>
+            </section>
+        
+            <section class="modal-flex">
+                <label for="status-banco">Status</label>
+                <select class="modal-conta-contabil" id="status-banco" name="status-banco" required>
+                  <option value="ativo">Ativo</option>
+                  <option value="inativo">Inativo</option>
+                </select><br>
+            </section>
+
+            <section class="modal-botoes">
+                <input class="modal-salvar-bancos" type="submit" value="Salvar">
+                <button class="modal-apagar-bancos" style="display:none;">Apagar</button>
+                <button class="modal-fechar-bancos">Cancelar</button>
+            </section>
+        </form>
+    </dialog>
+
+    <script src="{% static 'scripts/scripts-bancos-e-contas.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+/* Específicos Configurações */
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Compartilhado */
+.nav-configuracoes a {
+  color: var(--color7);
+}
+
+/* Títulos */
+h2 {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+/* Área do Acordeão */
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  margin: 4.5rem auto 1rem auto;
+  width: 100%;
+}
+
+section {
+  margin: 20px;
+  width: 80%;
+}
+
+.accordion-title a {
+  color: var(--color4);
+}
+
+a.accordion-title {
+  display: block;
+  padding: 15px;
+  cursor: pointer;
+  background-color: var(--color2);
+  color: var(--color4);
+  font-weight: 700;
+  font-size: 20px;
+  border-bottom: none;
+  transition: background-color 0.3s ease;
+}
+
+.accordion-content ul li {
+  list-style: none;
+  color: var(--color4);
+  margin: 15px 10px;
+  padding: 5px;
+}
+
+.accordion-content ul li:hover {
+  list-style: none;
+  padding-left: 10px;
+  background-color: var(--color7);
+  border-radius: 5px;
+  transition-duration: .5s;
+}
+
+.accordion-content ul li a {
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--color4);
+}
+
+.accordion-content ul li a:hover {
+  margin-left: 5px;
+  transition-duration: .2s;
+  color: var(--color9);
+}
+
+/* Acordeão */
+.accordion-section {
+  margin: 20px;
+  font-family: var(--primary-font);
+  border-radius: 5px;
+  overflow: hidden;
+  color: var(--color4);
+  transition: var(--transition-effect1) var(--transition-duration1);
+}
+
+.accordion-section:hover {
+  box-shadow: var(--box-shadow1);
+}
+
+.accordion-title {
+  padding: 15px;
+  cursor: pointer;
+  background-color: var(--color2);
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.3s ease;
+}
+
+.accordion-content {
+  padding: 10px;
+  max-height: 1px; /* Inicialmente definido para 1px para ocultar completamente o conteúdo */
+  overflow-y: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease; /* Adicionando transições suaves */
+  pointer-events: none; /* Desativando a interação durante a transição */
+}
+
+.accordion-section.open .accordion-content {
+  overflow-y: hidden; /* Adicionando scroll quando o conteúdo ultrapassar a altura máxima */
+  pointer-events: auto; /* Reativando a interação quando a seção está aberta */
+}
+
+.accordion-section-stakeholders {
+  margin-bottom: 8vh;
+}
+
+/* Botões */
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 50px;
+  margin: auto;
+  padding: 0.7em 1em;
+  padding-left: 0.9em;
+  font-family: var(--primary-font);
+  font-size: 13px;
+  color: var(--branco);
+  background: var(--color4);
+  fill: var(--branco);
+  cursor: pointer;
+  border: none;
+  border-radius: 15px;
+  font-weight: 900;
+}
+
+button span {
+  display: block;
+  margin-left: 0.3em;
+  transition: all 0.3s ease-in-out;
+}
+
+button svg {
+  display: block;
+  transform-origin: center center;
+  transition: transform 0.3s ease-in-out;
+}
+
+button:hover {
+  background: var(--color4);
+}
+
+button:hover .svg-wrapper {
+  transform: scale(1.25);
+  transition: 0.5s linear;
+}
+
+button:hover svg {
+  transform: translateX(1.2em) scale(1.1);
+  fill: var(--branco);
+}
+
+button:hover span {
+  opacity: 0;
+  transition: 0.3s linear;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* Rodapé */
+footer {
+  position: fixed;
+  font-family: var(--primary-font);
+  font-weight: 600;
+  background-color: var(--color2);
+  text-align: center;
+  padding: 5px;
+  bottom: 0;
+  width: 100%;
+}
+

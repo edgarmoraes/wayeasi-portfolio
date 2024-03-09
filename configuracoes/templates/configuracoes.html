@@ -1,0 +1,67 @@
+{% load static %}
+
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/configuracoes.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <link rel="icon" href="{% static 'wayeasi-favicon.png' %}" type="image/x-icon">
+    <title>WayEasi | Configurações</title>
+</head>
+<body>
+    <header class="header">
+        <!-- ############### Barra de Navegação Fixa ############### -->
+        <nav class="nav-bar">
+            <a class="logo" href="{% url 'realizado:realizado' %}">WAYEASI</a>
+            <ul class="nav-list">
+                <li class="nav-fluxo-de-caixa"><a href="{% url 'fluxo_de_caixa:fluxo_de_caixa' %}">Fluxo de Caixa</a></li>
+                <li class="nav-realizado"><a href="{% url 'realizado:realizado' %}">Realizado</a></li>
+                <li class="nav-relatorios"><a href="#">Relatórios</a></li>
+                <li class="nav-line"><div class="line"></div></li>
+                <li class="nav-configuracoes"><a href="{% url 'configuracoes:configuracoes' %}">Configurações</a></li>
+                <li class="nav-meu-perfil"><a href="meu-perfil.html">Meu Perfil</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="settings-list">
+        <section class="accordion-section">
+            <a class="accordion-title" href="{% url 'configuracoes:bancos_e_contas' %}">Bancos e Contas</a>
+        </section>
+        <section class="accordion-section">
+            <a class="accordion-title" href="#">Usuários e Permissões</a>
+        </section>
+        <section class="accordion-section">
+            <a class="accordion-title" href="#">Configurações Gerais</a>
+        </section>
+        <section class="accordion-section">
+            <h2 class="accordion-title">Centro de Custos</h2>
+            <div class="accordion-content">
+                <ul>
+                    <li><a href="#">Plano de Contas</a></li>
+                    <li><a href="#">Contas</a></li>
+                    <li><a href="#">Departamentos</a></li>
+                    <li><a href="#">Projetos</a></li>
+                </ul>
+            </div>
+        </section>
+        <section class="accordion-section accordion-section-stakeholders">
+            <h2 class="accordion-title">Stakeholders</h2>
+            <div class="accordion-content">
+                <ul>
+                    <li><a href="#">Fornecedores</a></li>
+                    <li><a href="#">Clientes</a></li>
+                    <li><a href="#">Colaboradores</a></li>
+                    <li><a href="#">Orgãos Governamentais</a></li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; WayEasi</p>
+    </footer>
+
+    <script src="{% static 'scripts/scripts-configuracoes.js' %}"></script>
+</body>
+</html>

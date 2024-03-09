@@ -1,0 +1,244 @@
+/* Compartilhado */
+.nav-configuracoes a {
+  color: var(--color7);
+}
+
+/* Tabelas Bancos */
+.box-grid-bancos {
+    width: 80%;
+    height: auto;
+    margin: 0 auto;
+    padding: 1.625rem 1.625rem;
+    background-color: var(--branco);
+    border-radius: 1rem;
+    box-shadow: var(--box-shadow1);
+}
+
+/* Botão de Adicionar */
+section {
+    margin: 4.5rem auto 1rem auto;
+}
+
+.botao {
+    margin: 10px auto;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 20px #0000002a;
+    cursor: pointer;
+    transition-duration: var(--transition-duration1);
+    overflow: hidden;
+    position: relative;
+}
+
+.adicionar-bancos {
+    background-color: var(--color5);
+}
+
+.svgIcon {
+    width: 40px;
+    transition-duration: var(--transition-duration1);
+}
+  
+.svgIcon path {
+    fill: var(--branco);
+}
+  
+.botao:hover {
+    width: 140px;
+    border-radius: 50px;
+    transition-duration: var(--transition-duration1);
+    align-items: center;
+}
+  
+.adicionar-bancos:hover {
+    background-color: var(--color3);
+}
+  
+.botao:hover .svgIcon {
+    width: 100px;
+    transition-duration: var(--transition-duration1);
+    transform: translateY(4%);
+}
+  
+.adicionar-bancos::before {
+    position: absolute;
+    top: -20px;
+    color: var(--branco);
+    transition-duration: var(--transition-duration1);
+    font-size: 2px;
+}
+
+.botao:hover.adicionar-bancos::before {
+    content: "Adicionar";
+}
+  
+.botao:hover::before {
+    font-size: 13px;
+    opacity: 1;
+    transform: translateY(30px);
+    transition-duration: var(--transition-duration1);
+}
+
+.botao:focus {
+    outline: none;
+}
+
+/* Modal */
+.modal-bancos {
+  width: 80%;
+  margin: auto auto;
+  padding: 2rem;
+  background-color: var(--branco);
+  border: none;
+  border-radius: 1rem;
+  box-shadow: var(--box-shadow1);
+  transition: var(--transition-duration1);
+  font-family: 'Open Sans', sans-serif;
+}
+
+.mesclar-2 {
+  grid-column: span 2;
+}
+
+.modal-bancos::backdrop {
+  overflow-y: scroll !important;
+  max-height: 100% !important;
+}
+
+.modal-titulo {
+  margin-bottom: 1rem;
+}
+
+dialog > form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+dialog > form  > section {
+  display: flex;
+  flex-direction: column;
+  margin: 0 5px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.modal-flex > select,
+.modal-flex > input {
+  width: 100%;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  margin-top: 5px;
+}
+
+/* Estilo das Caixas de Seleções e Datas */
+.modal-flex select,
+.modal-flex input {
+background-color: var(--color2);
+  border: none;
+  color: var(--color4);
+  padding: 0.7rem 1rem;
+  border-radius: 5px;
+  transition: var(--transition-effect1) .5s;
+}
+
+.modal-flex select:hover,
+.modal-flex select:focus,
+.modal-flex input:hover,
+.modal-flex input:focus {
+  box-shadow: var(--box-shadow1);
+}
+
+.modal-flex select,
+input:focus {
+  outline: none;
+  background-color: var(--color1);
+}
+
+/* Botões dos Modais */
+.modal-botoes {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 5px 5px;
+  gap: 1.5rem;
+}
+
+.modal-fechar-bancos,
+.modal-salvar-bancos,
+.modal-apagar-bancos {
+  border: none;
+  height: 45px;
+  color: var(--branco);
+  font-weight: 700;
+  padding: 0.7rem 1rem;
+  border-radius: 5px;
+  transition: var(--transition-effect1) var(--transition-duration2);
+}
+
+.modal-fechar-bancos:focus,
+.modal-salvar-bancos:focus,
+.modal-apagar-bancos:focus {
+  outline: none;
+}
+
+.modal-salvar-bancos {
+  background-color: var(--color5);
+}
+
+.modal-salvar-bancos:hover {
+  background-color: var(--color3);
+  box-shadow: var(--box-shadow2);
+}
+
+.modal-fechar-bancos {
+  background-color: var(--color6);
+}
+
+.modal-fechar-bancos:hover {
+  background-color: var(--color8);
+  box-shadow: var(--box-shadow2);
+}
+
+.modal-apagar-bancos {
+  background-color: #500000;
+}
+
+.modal-apagar-bancos:hover {
+  background-color: var(--color6);
+  box-shadow: var(--box-shadow2);
+}
+
+/* Tabela Bancos */
+.cadastro-contas-bancos-col {
+  width: 20%;
+  border-radius: 20px 0px 0px 20px;
+}
+
+.cadastro-ag-bancos-col {
+  width: 20%;
+}
+
+.cadastro-conta-bancos-col {
+  width: 20%;
+}
+
+.cadastro-saldo-bancos-col {
+  width: 20%;
+}
+
+.saldo_consolidado-banco-row {
+  width: 20%;
+}
+
+.cadastro-status-bancos-col {
+  width: 10%;
+  border-radius: 0px 20px 20px 0px;
+}

@@ -1,0 +1,337 @@
+/* Específicos Realizado */
+
+/* Compartilhado */
+.nav-realizado a {
+  color: var(--color7);
+}
+
+/* Componentes da Caixa de Filtros */
+
+/* Compartilhado */
+.box-grid {
+  display: flex;
+  flex-direction: column;
+  width: 700px;
+  height: auto;
+  margin: 4.5rem auto 1rem auto;
+  background-color: var(--branco);
+  border-radius: 1rem;
+  box-shadow: var(--box-shadow1);
+}
+
+.box-grid-filters {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 700px;
+  padding: 1rem;
+  padding-bottom: 0rem;
+}
+
+/* Tabela Bancos */
+
+/* Compartilhado */
+.box-grid-bancos {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  width: 700px;
+  height: 268px;
+  margin: 4.5rem auto 1rem auto;
+  padding: 1.625rem 1.625rem;
+  background-color: var(--branco);
+  border-radius: 1rem;
+  box-shadow: var(--box-shadow1);
+}
+
+/* Compartilhado */
+.conteudo-tabela-bancos {
+  max-height: 215px;
+  overflow: auto;
+}
+
+/* Tabela liquidação */
+.obs-col {
+  width: 350px !important;
+}
+
+.banco-col {
+  width: 200px !important;
+}
+
+/* Botões da Checkbox */
+
+/* Compartilhado */
+
+/* Botão de Liquidar */
+.retornar-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background-color: var(--color9);
+  cursor: pointer;
+  border: 2px solid var(--color9);
+  transition-duration: 0.3s;
+  position: relative;
+  overflow: hidden;
+  transform: scale(0.7);
+}
+
+.retornar-button:hover {
+  background-color: #fff267;
+  border: 2px solid #fff267;
+}
+
+.retornar-button:active {
+  transform: scale(0.8);
+}
+
+.btn-areas-realizado {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.retornar {
+  transform: scale(0.6);
+  transition: 200ms linear;
+  fill: var(--preto);
+}
+
+.retornar-button:hover > .retornar {
+  transform: scale(0.75);
+}
+
+.retornar-button:hover > .retornar path {
+  fill: var(--preto);
+  cursor: pointer;
+}
+
+/* Modais */
+.modal-valor,
+.modal-conta-contabil,
+.modal-parcelas {
+  background-color: #B5B5B5;
+  color: var(--branco);
+  border: none;
+  padding: 0.7rem 1rem;
+  border-radius: 5px;
+  transition: var(--transition-effect1) .5s;
+}
+
+.modal-valor:focus,
+.modal-conta-contabil:focus,
+.modal-parcelas:focus {
+  background-color: #B5B5B5 !important;
+}
+
+.modal-data,
+.modal-descricao,
+.modal-obs {
+  background-color: var(--color2);
+  border: none;
+  color: var(--preto);
+  padding: 0.7rem 1rem;
+  border-radius: 5px;
+  transition: var(--transition-effect1) .5s;
+}
+
+.modal-realizado {
+  width: 80%;
+  margin: auto auto;
+  padding: 2rem;
+  background-color: var(--branco);
+  border: none;
+  border-radius: 1rem;
+  box-shadow: var(--box-shadow1);
+  transition: var(--transition-duration1);
+  font-family: 'Open Sans', sans-serif;
+  outline: none;
+}
+
+.mesclar-2 {
+  grid-column: span 2;
+}
+
+.modal-recebimentos::backdrop,
+.modal-pagamentos::backdrop,
+.modal-transferencias::backdrop {
+  overflow-y: scroll !important;
+  max-height: 100% !important;
+}
+
+.modal-titulo {
+  margin-bottom: 1rem;
+  font-size: 20px;
+}
+
+dialog > form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.lancamentos-selecionados {
+  display: grid;
+  grid-template-columns: 0.4fr 0.6fr 0.8fr 0.40fr 0.3fr 0.1fr;
+}
+
+.modal-transferencias > form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+dialog > form > section {
+  display: flex;
+  flex-direction: column;
+  margin: 0 5px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+section.modal-flex {
+  margin: 0px 5px;
+}
+
+.modal-flex > select,
+.modal-flex > input {
+  width: 100%;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  margin-top: 5px;
+}
+
+/* Estilo das Caixas de Seleções e Datas */
+.modal-flex select:hover,
+.modal-flex select:focus,
+.modal-flex input:hover,
+.modal-flex input:focus {
+  box-shadow: var(--box-shadow1);
+}
+
+.modal-flex select,
+input:focus {
+  outline: none;
+  background-color: var(--color1);
+}
+
+/* Botões dos Modais */
+.modal-botoes {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin: 10px 5px;
+  gap: 1.5rem;
+}
+
+.modal-fechar-realizado,
+.modal-salvar {
+  border: none;
+  height: 45px;
+  color: var(--branco);
+  font-weight: 700;
+  padding: 0.7rem 1rem;
+  border-radius: 5px;
+  transition: var(--transition-effect1) var(--transition-duration2);
+}
+
+.modal-fechar-realizado,:focus,
+.modal-salvar:focus {
+  outline: none;
+}
+
+.modal-fechar-realizado:hover {
+  background-color: var(--color8);
+  box-shadow: var(--box-shadow2);
+}
+
+.modal-fechar-realizado {
+  background-color: var(--color6);
+}
+
+.modal-salvar {
+  background-color: var(--color5);
+}
+
+.modal-salvar:hover {
+  background-color: var(--color3);
+  box-shadow: var(--box-shadow2);
+}
+
+/* Tag Container */
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 5px;
+  margin-top: 10px;
+}
+
+.tag {
+  background-color: var(--color7);
+  color: #000000;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.tag input {
+  display: none;
+  border: none;
+  background: var(--color7);
+  color: var(--color4);
+  font-weight: 700;
+  width: auto;
+}
+
+.tag input:focus {
+  display: none;
+  border: none;
+  background: var(--color2);
+  color: var(--color4);
+  font-weight: 700;
+  width: auto;
+}
+
+input#tagInput {
+  padding: 8px;
+  font-size: 16px;
+}
+
+
+
+
+
+
+
+
+
+
+@media screen and (max-width: 768px) {
+  .box-grid,
+  .box-grid-filters,
+  .box-grid-bancos {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: calc(100% - 2rem);
+    margin: 1rem;
+    padding: 1rem;
+    height: auto;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  
+  .box-grid {
+    background-color: none;
+    box-shadow: none;
+    padding: 0rem;
+    margin: 0rem 1rem;
+  }
+  
+  .box-grid-filters {
+    border-radius: 1rem;
+    background-color: var(--branco);
+    box-shadow: var(--box-shadow1);
+  }
+}
